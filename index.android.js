@@ -1,51 +1,44 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
+'user strict';
 
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+var React = require('react-native');
 
-class HnReader extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+var { AppRegistry, StyleSheet, Navigator,} = React;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+var NewsItems = require('./components/news-items');
+var WebPage = require('./components/webpage');
+
+var ROUTES = {
+    news_items: NewsItems,
+    web_page: WebPage,
+};
+
+var HnReader = React.createClass({
+
+    renderScene: function(route, navigator){
+        var Component = ROUTES[route.name];
+
+        return (
+            <Component route={route} navigator={navigator} url={route.url}
+        );
+    },
+
+    render: function(){
+        return (
+            <Navigator
+              style={styles.container}
+              initialRoute={{name:'news_items', url: ''}}
+              renderScene={this.renderScene}
+              configureScene={() => {return Navigator.SceneConfigs.FloatFromRight; }}
+              />
+        );
+    },
+
+});
+
+var styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    }
 });
 
 AppRegistry.registerComponent('HnReader', () => HnReader);
